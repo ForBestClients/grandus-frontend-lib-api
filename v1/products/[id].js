@@ -13,7 +13,16 @@ import { get } from "lodash";
 
 export default withSession(async (req, res) => {
   if (get(req, "query.initial") == 1) {
-    if (await outputCachedData(req, res, cache)) return;
+    //custom cache management due to ?initial=1 elastic fallback
+    if (
+      get(req, "query.id") &&
+      (await outputCachedData(req, res, cache, {
+        cacheKeyType: "custom",
+        cacheKeyParts: [get(req, "query.id")],
+        cacheKeyUseUser: true,
+      }))
+    )
+      return;
 
     const product = await fetch(
       `${reqApiHost(req)}/api/v2/products?urlTitle=${get(req, "query.id")}`,
@@ -113,7 +122,11 @@ export default withSession(async (req, res) => {
   output.breadcrumbs = get(product, "breadcrumbs");
   output.meta = get(product, "meta");
 
-  saveDataToCache(req, cache, output);
+  saveDataToCache(req, cache, output, {
+    cacheKeyType: "custom",
+    cacheKeyParts: [get(req, "query.id")],
+    cacheKeyUseUser: true,
+  });
   res.status(get(product, "statusCode", 500)).json(output);
 });
 
