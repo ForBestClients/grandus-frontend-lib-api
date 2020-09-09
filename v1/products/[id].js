@@ -25,13 +25,13 @@ export default withSession(async (req, res) => {
       .then((data) => get(data, "data.[0]", {}));
 
     //normalization of ELASTIC PRODUCT into DB PRODUCT
-
     const productResult = {
       id: get(product, "id"),
       name: get(product, "name"),
       subtitle: get(product, "subtitle"),
       urlTitle: get(product, "urlTitle"),
       foreignKeyStr: get(product, "foreignKeyStr"),
+      categories: get(product, "categories"),
       // foreignKeyInt: 445462,
       partNo: get(product, "partNo"),
       sku: get(product, "sku"),
