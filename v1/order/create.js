@@ -44,12 +44,12 @@ export default withSession(async (req, res) => {
       deliveryZip: get(cartContactSession, "deliveryZip", ""),
       deliveryPhone: get(cartContactSession, "deliveryPhone", ""),
       deliveryEmail: get(cartContactSession, "deliveryEmail", ""),
-      note: get(values, "note", "TEST"),
+      note: get(values, "note", ""),
       deliveryType: get(values, "delivery", ""),
       paymentType: get(values, "payment", ""),
       cardPaymentReturnUrl: `${reqGetHost(req)}/objednavka/dakujeme`,
-      privacyPolicy: get(values, "", 1),
-      termsAndConditions: get(values, "", 1),
+      privacyPolicy: get(values, "", 0),
+      termsAndConditions: get(values, "", 0),
     },
   };
 
