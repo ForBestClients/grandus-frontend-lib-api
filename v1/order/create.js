@@ -4,7 +4,7 @@ import {
   CART_CONSTANT,
   CART_CONTACT_CONSTANT,
 } from "grandus-lib/constants/SessionConstants";
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 
 export default withSession(async (req, res) => {
   const { body = {}, method } = req;
@@ -44,14 +44,18 @@ export default withSession(async (req, res) => {
       deliveryZip: get(cartContactSession, "deliveryZip", ""),
       deliveryPhone: get(cartContactSession, "deliveryPhone", ""),
       deliveryEmail: get(cartContactSession, "deliveryEmail", ""),
-      note: get(values, "note", "TEST"),
+      note: get(values, "note", ""),
       deliveryType: get(values, "delivery", ""),
       paymentType: get(values, "payment", ""),
       cardPaymentReturnUrl: `${reqGetHost(req)}/objednavka/dakujeme`,
-      privacyPolicy: get(values, "", 1),
-      termsAndConditions: get(values, "", 1),
+      privacyPolicy: toNumber(get(values, "privacyPolicy", 0)),
+      termsAndConditions: toNumber(get(values, "termsAndConditions", 0)),
     },
   };
+
+  if (values?.params) {
+    orderData.order.params = values?.params;
+  }
 
   url += "";
   order = await fetch(url, {
@@ -61,7 +65,7 @@ export default withSession(async (req, res) => {
   }).then((result) => result.json());
 
   if (order) {
-    res.status(get(order, 'statusCode')).json(get(order, "data"));
+    res.status(get(order, "statusCode")).json(get(order, "data"));
     return;
   }
 });

@@ -58,8 +58,17 @@ export default withSession(async (req, res) => {
       //   res.status(200).json({ id, name: name || `User ${id}` });
       break;
 
+    case "DELETE":
+      req.session.unset(CART_CONSTANT);
+      res.statusCode = 500;
+      if (!req.session.get(CART_CONSTANT)) {
+        res.statusCode = 204;
+      }
+      res.end();
+      break;
+
     default:
-      res.setHeader("Allow", ["GET", "POST"]);
+      res.setHeader("Allow", ["GET", "POST", "DELETE"]);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 
