@@ -7,7 +7,7 @@ export default withSession(async (req, res) => {
   const userSession = req.session.get(USER_CONSTANT);
 
   if (!get(userSession, "accessToken")) {
-    res.status(401).end(JSON.stringify([{ message: "neprihlaseny //TODO" }]));
+    res.status(200).end(JSON.stringify([{ message: "neprihlaseny //TODO" }]));
     return;
   }
 

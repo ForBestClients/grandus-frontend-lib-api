@@ -23,7 +23,7 @@ export default withSession(async (req, res) => {
   switch (method) {
     case "GET":
       if (!cartAccessToken) {
-        res.statusCode = 404;
+        res.statusCode = 200;
         res.end(JSON.stringify([{ message: "kosik nenexistuje" }]));
         return;
       }
