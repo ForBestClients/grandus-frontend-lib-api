@@ -1,7 +1,7 @@
 import withSession, { extractSessionCart } from "grandus-lib/utils/session";
 import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
 import { CART_CONSTANT } from "grandus-lib/constants/SessionConstants";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 
 export default withSession(async (req, res) => {
   const { body = {}, method } = req;
@@ -59,12 +59,14 @@ export default withSession(async (req, res) => {
       break;
 
     case "DELETE":
-      req.session.unset(CART_CONSTANT);
+      req.session.set(CART_CONSTANT, '{}');
+      await req.session.save();
+
       res.statusCode = 500;
-      if (!req.session.get(CART_CONSTANT)) {
+      if (isEmpty(req.session.get(CART_CONSTANT))) {
         res.statusCode = 204;
       }
-      res.end();
+      res.json(req.session.get(CART_CONSTANT));
       break;
 
     default:

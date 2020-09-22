@@ -1,5 +1,6 @@
 import withSession from "grandus-lib/utils/session";
 import { CART_CONTACT_CONSTANT } from "grandus-lib/constants/SessionConstants";
+import { isEmpty } from 'lodash';
 
 export default withSession(async (req, res) => {
   const { body = {}, method } = req;
@@ -26,12 +27,14 @@ export default withSession(async (req, res) => {
       break;
 
     case "DELETE":
-      req.session.unset(CART_CONTACT_CONSTANT);
+      req.session.set(CART_CONTACT_CONSTANT, '{}');
+      await req.session.save();
+
       res.statusCode = 500;
-      if (!req.session.get(CART_CONTACT_CONSTANT)) {
+      if (isEmpty(req.session.get(CART_CONTACT_CONSTANT))) {
         res.statusCode = 204;
       }
-      res.end();
+      res.json(req.session.get(CART_CONTACT_CONSTANT));
       break;
 
     default:
