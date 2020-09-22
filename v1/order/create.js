@@ -53,6 +53,10 @@ export default withSession(async (req, res) => {
     },
   };
 
+  if (values?.params) {
+    orderData.order.params = values?.params;
+  }
+
   url += "";
   order = await fetch(url, {
     headers: reqGetHeaders(req),
@@ -61,7 +65,7 @@ export default withSession(async (req, res) => {
   }).then((result) => result.json());
 
   if (order) {
-    res.status(get(order, 'statusCode')).json(get(order, "data"));
+    res.status(get(order, "statusCode")).json(get(order, "data"));
     return;
   }
 });
