@@ -67,7 +67,6 @@ export default withSession(async (req, res) => {
       if (isEmpty(sessionCart)) {
         res.statusCode = 200;
       }
-      console.log('cart', sessionCart);
       res.json(!isEmpty(sessionCart) ? sessionCart : '{}');
       break;
 
