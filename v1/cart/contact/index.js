@@ -27,14 +27,15 @@ export default withSession(async (req, res) => {
       break;
 
     case "DELETE":
-      req.session.set(CART_CONTACT_CONSTANT, '{}');
+      req.session.unset(CART_CONTACT_CONSTANT);
       await req.session.save();
 
       res.statusCode = 500;
-      if (isEmpty(req.session.get(CART_CONTACT_CONSTANT))) {
-        res.statusCode = 204;
+      const contact = req.session.get(CART_CONTACT_CONSTANT);
+      if (isEmpty(contact)) {
+        res.statusCode = 200;
       }
-      res.json(req.session.get(CART_CONTACT_CONSTANT));
+      res.json(!isEmpty(contact) ? contact : JSON.parse('{}'));
       break;
 
     default:

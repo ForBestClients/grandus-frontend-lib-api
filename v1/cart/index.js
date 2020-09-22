@@ -59,14 +59,16 @@ export default withSession(async (req, res) => {
       break;
 
     case "DELETE":
-      req.session.set(CART_CONSTANT, '{}');
+      req.session.unset(CART_CONSTANT);
       await req.session.save();
 
       res.statusCode = 500;
-      if (isEmpty(req.session.get(CART_CONSTANT))) {
-        res.statusCode = 204;
+      const sessionCart = req.session.get(CART_CONSTANT);
+      if (isEmpty(sessionCart)) {
+        res.statusCode = 200;
       }
-      res.json(req.session.get(CART_CONSTANT));
+      console.log('cart', sessionCart);
+      res.json(!isEmpty(sessionCart) ? sessionCart : '{}');
       break;
 
     default:
