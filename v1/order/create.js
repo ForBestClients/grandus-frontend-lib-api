@@ -4,7 +4,7 @@ import {
   CART_CONSTANT,
   CART_CONTACT_CONSTANT,
 } from "grandus-lib/constants/SessionConstants";
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 
 export default withSession(async (req, res) => {
   const { body = {}, method } = req;
@@ -48,8 +48,8 @@ export default withSession(async (req, res) => {
       deliveryType: get(values, "delivery", ""),
       paymentType: get(values, "payment", ""),
       cardPaymentReturnUrl: `${reqGetHost(req)}/objednavka/dakujeme`,
-      privacyPolicy: get(values, "", 0),
-      termsAndConditions: get(values, "", 0),
+      privacyPolicy: toNumber(get(values, "privacyPolicy", 0)),
+      termsAndConditions: toNumber(get(values, "termsAndConditions", 0)),
     },
   };
 

@@ -19,10 +19,13 @@ export default withSession(async (req, res) => {
     body: body,
   }).then((result) => result.json());
 
-  req.session.set(CART_CONSTANT, extractSessionCart(get(response, "data.data")));
+  req.session.set(
+    CART_CONSTANT,
+    extractSessionCart(get(response, "data.data"))
+  );
   await req.session.save();
 
-  res.status(get(response, 'statusCode', 500)).json(get(response, "data"));
+  res.status(get(response, "statusCode", 500)).json(get(response, "data"));
 
   // Update or create data in your database
   //   res.status(200).json({ id, name: name || `User ${id}` });
