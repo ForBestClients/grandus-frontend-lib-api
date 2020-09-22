@@ -26,6 +26,17 @@ export default withSession(async (req, res) => {
   const userId = get(req.session.get(USER_CONSTANT), "id");
   let wishlist = {};
 
+  if (!userId) {
+    res
+      .status(401)
+      .json({
+        errorMessage:
+          "Obľúbené produkty sú dostupné iba pre prihlásených používateľov.",
+        ...transformWishlist(),
+      });
+    return;
+  }
+
   switch (method) {
     case "DELETE":
       const itemId = get(query, "id");
