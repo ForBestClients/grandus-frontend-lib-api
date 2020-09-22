@@ -99,6 +99,10 @@ export default withSession(async (req, res) => {
       gallery: get(product, "gallery", []),
       detailedParameters: get(product, "detailedParameters", []),
       additionalInfos: get(product, "additionalInfos", []),
+
+      //added fields
+      meta: {},
+      breadcrumbs: []
     };
 
     res.statusCode = 200;
@@ -119,7 +123,7 @@ export default withSession(async (req, res) => {
   ).then((result) => result.json());
 
   const output = get(product, "data", {});
-  output.breadcrumbs = get(product, "breadcrumbs");
+  output.breadcrumbs = get(product, "breadcrumbs", []);
   output.meta = get(product, "meta");
 
   saveDataToCache(req, cache, output, {
