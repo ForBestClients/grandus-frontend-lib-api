@@ -99,6 +99,7 @@ export default withSession(async (req, res) => {
       gallery: get(product, "gallery", []),
       detailedParameters: get(product, "detailedParameters", []),
       additionalInfos: get(product, "additionalInfos", []),
+      marketingSets: get(product, "marketingSets", []),
 
       //added fields
       meta: {},
