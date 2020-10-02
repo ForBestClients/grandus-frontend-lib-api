@@ -19,6 +19,8 @@ export default async (req, res) => {
     url += `/${orderAccessToken}`;
   }
 
+  url += '?expand=orderItems.product.categories'
+
   const order = await fetch(url, {
     headers: reqGetHeaders(req),
   }).then(result => result.json());
