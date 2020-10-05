@@ -88,6 +88,7 @@ export default withSession(async (req, res) => {
       variants: get(product, "variants"),
       // priceInfo: { recycle: "0.0400", author: "1.0700" },
       type: get(product, "type"),
+      labels: get(product, "labels", []),
       // typeLabel: "Produkt",
       // productSetProducts: [],
       // productPackageProducts: [],
