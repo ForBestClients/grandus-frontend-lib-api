@@ -30,6 +30,10 @@ export default withSession(async (req, res) => {
         : [get(req, "query.productIds")];
     }
 
+    if (get(req, "query.search")) {
+      requestBody.search = get(req, "query.search", "");
+    }
+
     if (get(req, "query.param")) {
       // requestBody.param = pathToParams(get(req, "query.param", ""));
     }
