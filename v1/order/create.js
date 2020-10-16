@@ -53,6 +53,12 @@ export default withSession(async (req, res) => {
     },
   };
 
+  if (values?.deliveryTime) {
+    orderData.order.operationUnitId = get(values, 'deliveryTime.operationUnitId', ''),
+    orderData.order.deliveryAt = get(values, 'deliveryTime.date', '') + ' ' + get(values, 'deliveryTime.from', ''),
+    orderData.order.slotLengthInMinutes = get(values, 'deliveryTime.slotLengthInMinutes', '');
+  }
+
   if (values?.params) {
     orderData.order.params = values?.params;
   }
