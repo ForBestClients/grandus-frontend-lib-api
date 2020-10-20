@@ -32,18 +32,6 @@ export default withSession(async (req, res) => {
       countryId: get(cartContactSession, "countryId", ""),
       phone: get(cartContactSession, "phone", ""),
       email: get(cartContactSession, "email", ""),
-      companyName: get(cartContactSession, "companyName", ""),
-      ico: get(cartContactSession, "ico", ""),
-      dic: get(cartContactSession, "dic", ""),
-      icDPH: get(cartContactSession, "icDPH", ""),
-      deliveryName: get(cartContactSession, "deliveryName", ""),
-      deliverySurname: get(cartContactSession, "deliverySurname", ""),
-      deliveryCity: get(cartContactSession, "deliveryCity", ""),
-      deliveryStreet: get(cartContactSession, "deliveryStreet", ""),
-      deliveryStreetNumber: get(cartContactSession, "deliveryStreetNumber", ""),
-      deliveryZip: get(cartContactSession, "deliveryZip", ""),
-      deliveryPhone: get(cartContactSession, "deliveryPhone", ""),
-      deliveryEmail: get(cartContactSession, "deliveryEmail", ""),
       note: get(values, "note", ""),
       deliveryType: get(values, "delivery", ""),
       paymentType: get(values, "payment", ""),
@@ -53,10 +41,59 @@ export default withSession(async (req, res) => {
     },
   };
 
+  if (cartContactSession?.isCompany) {
+    orderData.order.companyName = get(cartContactSession, "companyName", "");
+    orderData.order.ico = get(cartContactSession, "ico", "");
+    orderData.order.dic = get(cartContactSession, "dic", "");
+    orderData.order.icDPH = get(cartContactSession, "icDPH", "");
+  }
+
+  if (cartContactSession?.isDifferentDeliveryAddress) {
+    orderData.order.deliveryName = get(cartContactSession, "deliveryName", "");
+    orderData.order.deliverySurname = get(
+      cartContactSession,
+      "deliverySurname",
+      ""
+    );
+    orderData.order.deliveryCity = get(cartContactSession, "deliveryCity", "");
+    orderData.order.deliveryStreet = get(
+      cartContactSession,
+      "deliveryStreet",
+      ""
+    );
+    orderData.order.deliveryStreetNumber = get(
+      cartContactSession,
+      "deliveryStreetNumber",
+      ""
+    );
+    orderData.order.deliveryZip = get(cartContactSession, "deliveryZip", "");
+    orderData.order.deliveryPhone = get(
+      cartContactSession,
+      "deliveryPhone",
+      ""
+    );
+    orderData.order.deliveryEmail = get(
+      cartContactSession,
+      "deliveryEmail",
+      ""
+    );
+  }
+
   if (values?.deliveryTime) {
-    orderData.order.operationUnitId = get(values, 'deliveryTime.operationUnitId', ''),
-    orderData.order.deliveryAt = get(values, 'deliveryTime.date', '') + ' ' + get(values, 'deliveryTime.from', ''),
-    orderData.order.slotLengthInMinutes = get(values, 'deliveryTime.slotLengthInMinutes', '');
+    (orderData.order.operationUnitId = get(
+      values,
+      "deliveryTime.operationUnitId",
+      ""
+    )),
+      (orderData.order.deliveryAt =
+        get(values, "deliveryTime.date", "") +
+        " " +
+        get(values, "deliveryTime.from", "")),
+      (orderData.order.slotLengthInMinutes = get(
+        values,
+        "deliveryTime.slotLengthInMinutes",
+        ""
+      ));
   }
 
   if (values?.params) {
