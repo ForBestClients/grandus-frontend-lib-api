@@ -1,7 +1,6 @@
 import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
 
 export default async (req, res) => {
-  console.log(req.body);
   const response = await fetch(
     `${reqApiHost({})}/api/v2/newsletter/subscribe`,
     {
