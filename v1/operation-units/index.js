@@ -10,7 +10,6 @@ import cache, {
 } from "grandus-lib/utils/cache";
 
 export default async (req, res) => {
-
   if (await outputCachedData(req, res, cache)) return;
 
   let pagination = {};
@@ -23,7 +22,7 @@ export default async (req, res) => {
       req,
       "query.perPage",
       process.env.NEXT_PUBLIC_PRODUCT_DEFAULT_PER_PAGE
-    )}&expand=openingHours`,
+    )}&deliveryTown=${encodeURIComponent(get(req, "query.deliveryTown", ""))}&expand=openingHours`,
     {
       method: "get",
       headers: reqGetHeaders(req),
