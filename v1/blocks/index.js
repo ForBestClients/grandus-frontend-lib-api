@@ -13,13 +13,11 @@ export default async (req, res) => {
     {
       headers: reqGetHeaders(req),
     }
-  )
-    .then((result) => result.json())
-    .then((r) => get(r, "data", []));
+  ).then((result) => result.json());
 
   if (get(blocks, "statusCode", 500) == 200) {
-    saveDataToCache(req, cache, blocks);
+    saveDataToCache(req, cache, blocks?.data);
   }
 
-  res.status(get(blocks, "statusCode", 500)).json(blocks);
+  res.status(get(blocks, "statusCode", 500)).json(blocks?.data);
 };
