@@ -4,7 +4,7 @@ import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
 import { USER_CONSTANT, CART_CONSTANT } from "grandus-lib/constants/SessionConstants";
 
 export default withSession(async (req, res) => {
-  const user = await fetch(`${reqApiHost({})}/api/v2/users/login`, {
+  const user = await fetch(`${reqApiHost({})}/api/v2/users/login?expand=cart`, {
     method: "POST",
     headers: reqGetHeaders(req),
     body: req.body,
