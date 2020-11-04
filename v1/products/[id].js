@@ -24,12 +24,17 @@ export default withSession(async (req, res) => {
     )
       return;
 
-    const product = await fetch(
-      `${reqApiHost(req)}/api/v2/products?urlTitle=${get(req, "query.id")}`,
-      {
-        headers: reqGetHeaders(req),
-      }
-    )
+    let initialUri = `${reqApiHost(req)}/api/v2/products?urlTitle=${get(
+      req,
+      "query.id"
+    )}`;
+    if (get(req, "query.hash")) {
+      initialUri += `&hash=${get(req, "query.hash")}`;
+    }
+
+    const product = await fetch(initialUri, {
+      headers: reqGetHeaders(req),
+    })
       .then((result) => result.json())
       .then((data) => get(data, "data.[0]", {}));
 
@@ -59,7 +64,7 @@ export default withSession(async (req, res) => {
       priceData: get(product, "priceData"),
       finalPriceData: get(product, "finalPriceData"),
       standardPriceData: get(product, "standardPriceData"),
-      // specialPrice: null,
+      specialPrice: get(product, "specialPrice"),
       VAT: get(product, "VAT"),
       brand: get(product, "brand", {}),
       kind: get(product, "kind", {}),
@@ -104,7 +109,7 @@ export default withSession(async (req, res) => {
 
       //added fields
       meta: {},
-      breadcrumbs: []
+      breadcrumbs: [],
     };
 
     res.statusCode = 200;
@@ -113,16 +118,18 @@ export default withSession(async (req, res) => {
     return;
   }
 
-  const product = await fetch(
-    `${reqApiHost(req)}/api/v2/products/${get(
-      req,
-      "query.id"
-    )}?${getProductDetailExpand(true)}&${getProductDetailFields(true)}`,
+  let uri = `${reqApiHost(req)}/api/v2/products/${get(
+    req,
+    "query.id"
+  )}?${getProductDetailExpand(true)}&${getProductDetailFields(true)}`;
 
-    {
-      headers: reqGetHeaders(req),
-    }
-  ).then((result) => result.json());
+  if (get(req, "query.hash")) {
+    uri += `&hash=${get(req, "query.hash")}`;
+  }
+
+  const product = await fetch(uri, {
+    headers: reqGetHeaders(req),
+  }).then((result) => result.json());
 
   const output = get(product, "data", {});
   output.breadcrumbs = get(product, "breadcrumbs", []);
