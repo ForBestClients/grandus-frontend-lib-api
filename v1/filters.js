@@ -1,13 +1,13 @@
 import { reqExtractUri, reqGetHeaders, reqApiHost } from "grandus-lib/utils";
 import { get } from "lodash";
 import { getApiBodyFromPath } from "grandus-lib/hooks/useFilter";
+import withSession from "grandus-lib/utils/session";
 import cache, {
   outputCachedData,
   saveDataToCache,
 } from "grandus-lib/utils/cache";
 
-export default async (req, res) => {
-
+export default withSession(async (req, res) => {
   if (await outputCachedData(req, res, cache)) return;
 
   const result = await fetch(
@@ -30,4 +30,4 @@ export default async (req, res) => {
 
   saveDataToCache(req, cache, output);
   res.status(get(result, "statusCode", 500)).json(output);
-};
+});
