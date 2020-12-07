@@ -9,13 +9,7 @@ import {
 import { getApiBodyFromPath, pathToParams } from "grandus-lib/hooks/useFilter";
 
 export default withSession(async (req, res) => {
-  const requestBody = {
-    orderBy: get(
-      req,
-      "query.orderBy",
-      process.env.NEXT_PUBLIC_PRODUCT_DEFAULT_ORDERING
-    ),
-  };
+  const requestBody = {};
 
   if (get(req, "query")) {
     if (get(req, "query.category")) {
@@ -32,6 +26,18 @@ export default withSession(async (req, res) => {
 
     if (get(req, "query.search")) {
       requestBody.search = get(req, "query.search", "");
+    }
+
+    if (get(req, "query.orderBy")) {
+      requestBody.orderBy = get(req, "query.orderBy");
+    } else {
+      if (!get(req, "query.search")) {
+        requestBody.orderBy = get(
+          req,
+          "query.orderBy",
+          process.env.NEXT_PUBLIC_PRODUCT_DEFAULT_ORDERING
+        );
+      }
     }
 
     if (get(req, "query.marketingCampaign")) {
