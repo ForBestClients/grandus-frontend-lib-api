@@ -1,32 +1,26 @@
 import withSession from "grandus-lib/utils/session";
 import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
 import { USER_CONSTANT } from "grandus-lib/constants/SessionConstants";
-import { get, isEmpty } from "lodash";
-import cache, {
-  outputCachedData,
-  saveDataToCache,
-} from "grandus-lib/utils/cache";
+import { get } from "lodash";
 
 export default withSession(async (req, res) => {
-  if (await outputCachedData(req, res, cache)) return;
-
-  const items = await fetch(
+  const document = await fetch(
     `${reqApiHost(req)}/api/v2/users/${get(
       req.session.get(USER_CONSTANT),
       "id"
-    )}/delivery-notes`,
+    )}/documents/${get(req, "query.id")}`,
     {
       headers: reqGetHeaders(req),
     }
   ).then((result) => result.json());
 
-  if (!isEmpty(items?.data)) {
-    saveDataToCache(req, cache, items?.data);
+  if (document?.data) {
+    res.setHeader("Content-Type", "application/pdf");
+    res.status(200).send(Buffer.from(document?.data, "base64"));
+  } else {
+    res.setHeader("Content-Type", "text/html");
+    res.status(500).send("dokument sa nenašiel");
   }
-
-  try {
-    res.status(200).json(items?.data);
-  } catch (error) {
-    res.status(500).json([]);
-  }
+  res.end();
+  return;
 });
