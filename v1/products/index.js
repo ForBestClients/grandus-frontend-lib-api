@@ -43,10 +43,6 @@ export default withSession(async (req, res) => {
     if (get(req, "query.marketingCampaign")) {
       requestBody.marketingCampaign = get(req, "query.marketingCampaign", "");
     }
-
-    if (get(req, "query.param")) {
-      // requestBody.param = pathToParams(get(req, "query.param", ""));
-    }
   }
 
   const fields =

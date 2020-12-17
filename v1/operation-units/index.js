@@ -22,7 +22,11 @@ export default async (req, res) => {
       req,
       "query.perPage",
       process.env.NEXT_PUBLIC_PRODUCT_DEFAULT_PER_PAGE
-    )}&deliveryTown=${encodeURIComponent(get(req, "query.deliveryTown", ""))}&expand=openingHours`,
+    )}&deliveryTown=${encodeURIComponent(get(req, "query.deliveryTown", ""))}&expand=${get(
+      req,
+      "query.expand",
+      process.env.NEXT_PUBLIC_OPERATION_UNIT_EXPAND
+    )}`,
     {
       method: "get",
       headers: reqGetHeaders(req),
