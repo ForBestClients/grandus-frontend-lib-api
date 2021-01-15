@@ -3,8 +3,10 @@ import { reqGetHeaders, reqApiHost, reqGetHost } from "grandus-lib/utils";
 import {
   CART_CONSTANT,
   CART_CONTACT_CONSTANT,
+  DELIVERY_DATA_SESSION_STORAGE_KEY,
+  SESSION_STORAGE_CONSTANT,
 } from "grandus-lib/constants/SessionConstants";
-import { get, toNumber } from "lodash";
+import { get, toNumber, isEmpty } from "lodash";
 
 export default withSession(async (req, res) => {
   const { body = {}, method } = req;
@@ -15,7 +17,10 @@ export default withSession(async (req, res) => {
 
   const cartSession = req.session.get(CART_CONSTANT);
   const cartContactSession = JSON.parse(req.session.get(CART_CONTACT_CONSTANT));
+  const sessionStorage = req.session.get(SESSION_STORAGE_CONSTANT);
+
   const cartAccessToken = get(cartSession, "accessToken");
+  const cartSpecificDeliveryData = get(sessionStorage, DELIVERY_DATA_SESSION_STORAGE_KEY);
 
   let order = null;
   let url = `${reqApiHost(req)}/api/v2/orders`;
@@ -94,6 +99,10 @@ export default withSession(async (req, res) => {
         "deliveryTime.slotLengthInMinutes",
         ""
       ));
+  }
+
+  if (!isEmpty(cartSpecificDeliveryData)) {
+    orderData.order.specificDeliveryJson = JSON.stringify(cartSpecificDeliveryData);
   }
 
   if (values?.params) {
