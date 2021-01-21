@@ -3,10 +3,11 @@ import cache, {
   outputCachedData,
   saveDataToCache,
 } from "grandus-lib/utils/cache";
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 
 export default async (req, res) => {
-  if (await outputCachedData(req, res, cache)) return;
+  const useCache = toNumber(get(req, 'query.cache', 1));
+  if (useCache && await outputCachedData(req, res, cache)) return;
 
   const blocks = await fetch(
     `${reqApiHost(req)}/api/v2/static-blocks${reqExtractUri(req.url)}`,
@@ -15,7 +16,7 @@ export default async (req, res) => {
     }
   ).then((result) => result.json());
 
-  if (get(blocks, "statusCode", 500) == 200) {
+  if (useCache && get(blocks, "statusCode", 500) == 200) {
     saveDataToCache(req, cache, blocks?.data);
   }
 
