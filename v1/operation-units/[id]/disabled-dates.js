@@ -6,7 +6,7 @@ import {
 
 export default async (req, res) => {
   const disabledDates = await fetch(
-      `${reqApiHost(req)}/api/v2/operation-units/${get(req, "query.id")}/disabled-dates?from=${get(req, "query.from")}&to=${get(req, "query.to")}&skipSlots=${get(req, "query.skipSlots", 1)}`,
+      `${reqApiHost(req)}/api/v2/operation-units/${get(req, "query.id")}/disabled-dates?from=${get(req, "query.from")}&to=${get(req, "query.to")}&useSlots=${get(req, "query.useSlots", 0)}`,
       {
         method: "get",
         headers: reqGetHeaders(req),
