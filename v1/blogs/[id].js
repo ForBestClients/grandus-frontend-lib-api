@@ -7,11 +7,14 @@ import cache, {
 } from "grandus-lib/utils/cache";
 
 export default withSession(async (req, res) => {
-  if (await outputCachedData(req, res, cache, {
-    cacheKeyType: "custom",
-    cacheKeyParts: [get(req, "query.id")],
-    cacheKeyUseUser: true,
-  })) return;
+  let cacheOptions = {};
+  if (get(req, 'query.cacheForUser', false) == 'true') {
+    cacheOptions = {
+      cacheKeyType: "custom",
+      cacheKeyParts: [get(req, "query.id")]
+    };
+  }
+  if (await outputCachedData(req, res, cache, cacheOptions)) return;
   const page = await fetch(
     `${reqApiHost(req)}/api/v2/blogs/${get(
       req,
@@ -24,13 +27,9 @@ export default withSession(async (req, res) => {
 
   const data = page?.data;
   if (get(page, "statusCode", 500) == 200) {
-    saveDataToCache(req, cache, data, {
-      cacheKeyType: "custom",
-      cacheKeyParts: [get(req, "query.id")],
-      cacheKeyUseUser: true,
-    });
+    saveDataToCache(req, cache, data, cacheOptions);
   }
-  res.status(get(page, "statusCode", 500)).json(data);  
+  res.status(get(page, "statusCode", 500)).json(data);
 });
 
 export const config = {
