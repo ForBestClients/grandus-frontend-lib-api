@@ -16,7 +16,15 @@ export default async (req, res) => {
       req,
       "query.perPage",
       process.env.NEXT_PUBLIC_BLOG_DEFAULT_PER_PAGE
-    )}&communityCategoryId=${get(req, "query.communityCategoryId", "")}`,
+    )}&communityCategoryId=${get(
+      req,
+      "query.communityCategoryId",
+      ""
+    )}&expand=${get(
+      req,
+      "query.expand",
+      process.env.NEXT_PUBLIC_BLOG_CARD_EXPAND
+    )}`,
     {
       method: "get",
       headers: reqGetHeaders(req),
