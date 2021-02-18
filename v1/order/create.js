@@ -28,7 +28,7 @@ export default withSession(async (req, res) => {
   const orderData = {
     order: {
       cart: { accessToken: cartAccessToken },
-      name: get(cartContactSession, "name", ""),
+      name: get(cartContactSession, "firstname", "") || get(cartContactSession, "name", ""),
       surname: get(cartContactSession, "surname", ""),
       city: get(cartContactSession, "city", ""),
       street: get(cartContactSession, "street", ""),
