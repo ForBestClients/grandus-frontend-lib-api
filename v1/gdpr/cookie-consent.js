@@ -13,13 +13,13 @@ const generateOutput = (webinstance, consent) => {
 export default withSession(async (req, res) => {
   const { method } = req;
 
-  const webinstance = await fetch(
-    `${reqGetHost(req)}/api/lib/v1/webinstance`
-  ).then((result) => result.json());
-
   switch (method) {
     case "GET":
       const cookieConsent = req.session.get(LEGAL_COOKIE_CONSENT);
+      const webinstance = await fetch(
+        `${reqGetHost(req)}/api/lib/v1/webinstance`
+      ).then((result) => result.json());
+
       res.status(200).json(generateOutput(webinstance, cookieConsent));
       break;
 
@@ -27,7 +27,7 @@ export default withSession(async (req, res) => {
       req.session.set(LEGAL_COOKIE_CONSENT, true);
       await req.session.save();
 
-      res.status(200).json(generateOutput(webinstance, cookieConsent));
+      res.status(200).json(generateOutput({}, true));
       break;
 
     default:

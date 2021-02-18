@@ -1,5 +1,5 @@
 import withSession, { extractSessionCart } from "grandus-lib/utils/session";
-import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
+import { reqGetHeaders, reqApiHost, getApiExpand } from "grandus-lib/utils";
 import { CART_CONSTANT } from "grandus-lib/constants/SessionConstants";
 import { get } from "lodash";
 
@@ -23,7 +23,14 @@ export default withSession(async (req, res) => {
     "query.itemId"
   )}`;
 
-  url += "?expand=items";
+  if (getApiExpand("CART")) {
+    url += "?" + getApiExpand("CART", true);
+  }
+
+  if (getApiExpand("CART", false, "FIELDS")) {
+    url +=
+      (getApiExpand("CART") ? "&" : "?") + getApiExpand("CART", true, "FIELDS");
+  }
 
   switch (method) {
     // case "GET":

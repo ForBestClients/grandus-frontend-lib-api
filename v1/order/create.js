@@ -40,6 +40,7 @@ export default withSession(async (req, res) => {
       note: get(values, "note", ""),
       deliveryType: get(values, "delivery", ""),
       paymentType: get(values, "payment", ""),
+      operationUnitId: get(values, "operationUnitId", ""),
       cardPaymentReturnUrl: `${reqGetHost(req)}/objednavka/dakujeme`,
       privacyPolicy: toNumber(get(values, "privacyPolicy", 0)),
       termsAndConditions: toNumber(get(values, "termsAndConditions", 0)),
