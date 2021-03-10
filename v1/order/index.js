@@ -1,4 +1,4 @@
-import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
+import { reqGetHeaders, reqApiHost, getApiExpand } from "grandus-lib/utils";
 import { get } from "lodash";
 
 export default async (req, res) => {
@@ -19,15 +19,23 @@ export default async (req, res) => {
     url += `/${orderAccessToken}`;
   }
 
-  url += '?expand=orderItems.product.categories'
+  if (getApiExpand("ORDER") !== "undefined") {
+    url += "?" + getApiExpand("ORDER", true);
+  } else {
+    url += "?expand=orderItems.product.categories";
+  }
+
+  if (getApiExpand("ORDER", false, "FIELDS") !== "undefined") {
+    url += "&" + getApiExpand("ORDER", true, "FIELDS");
+  }
 
   const order = await fetch(url, {
     headers: reqGetHeaders(req),
-  }).then(result => result.json());
+  }).then((result) => result.json());
   // Get data from your database
   //   res.status(200).json({ id, name: `User ${id}` });
 
   const orderData = get(order, "data");
-  res.status(get(order, 'statusCode')).json(orderData ? orderData : '{}');
+  res.status(get(order, "statusCode")).json(orderData ? orderData : "{}");
   return;
 };
