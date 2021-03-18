@@ -60,7 +60,10 @@ export default withSession(async (req, res) => {
         await req.session.save();
       }
 
-      res.status(get(cart, "statusCode", 500)).json(get(cart, 'data'));
+      const newCart = get(cart, 'data');
+      newCart.success = cart?.success;
+
+      res.status(get(cart, "statusCode", 500)).json(newCart);
 
       // Update or create data in your database
       //   res.status(200).json({ id, name: name || `User ${id}` });
