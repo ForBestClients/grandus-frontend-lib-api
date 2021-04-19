@@ -33,14 +33,12 @@ export default withSession(async (req, res) => {
   const cartAccessToken = get(cartSession, "accessToken");
 
   if (!cartAccessToken) {
-    res.statusCode = 404;
-    res.end("cart not found");
+    res.status(404).json({ message: "cart not found" });
     return;
   }
 
   if (isEmpty(items)) {
-    res.statusCode = 500;
-    res.end("items not provided");
+    res.status(500).json({ message: "items not provided" });
     return;
   }
 
