@@ -5,7 +5,7 @@ export default async (req, res) => {
   const jsonBody = JSON.parse(body);
 
   const response = await fetch(`${reqApiHost(req)}/api/v2/users/check-email`, {
-    method: 'POST',
+    method: "POST",
     headers: reqGetHeaders(req),
     body: JSON.stringify({ user: { email: jsonBody?.email } }),
   }).then((result) => result.json());
