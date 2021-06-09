@@ -1,12 +1,50 @@
-import withSession from "grandus-lib/utils/session";
-import { reqGetHeaders, reqApiHost, reqGetHost } from "grandus-lib/utils";
+import withSession, { extractSessionUser } from "grandus-lib/utils/session";
+import { reqGetHeaders, reqApiHost, reqGetHost, generateRandomString } from "grandus-lib/utils";
 import {
   CART_CONSTANT,
   CART_CONTACT_CONSTANT,
   DELIVERY_DATA_SESSION_STORAGE_KEY,
   SESSION_STORAGE_CONSTANT,
+  USER_CONSTANT,
 } from "grandus-lib/constants/SessionConstants";
 import { get, toNumber, isEmpty } from "lodash";
+
+const createUser = async (contact, cartAccessToken, req) => {
+  const pass = generateRandomString();
+  const reqBody = {
+    user: {
+      name: get(contact, "firstname") || get(contact, 'name'),
+      surname: get(contact, "surname"),
+      email: get(contact, "email"),
+      password: get(contact, "password") || pass,
+      passwordRepeat: get(contact, "passwordConfitm") || pass,
+    },
+  };
+  if (cartAccessToken) {
+    reqBody.cart = { accessToken: cartAccessToken };
+  }
+  if (get(contact, "isCompany")) {
+    reqBody.company = {
+      name: get(contact, "companyName"),
+      businessId: get(contact, "ico"),
+      taxId: get(contact, "dic"),
+      vatNumber: get(contact, "icDPH"),
+    };
+  }
+
+  const newUser = await fetch(`${reqApiHost({})}/api/v2/users`, {
+    method: "POST",
+    headers: reqGetHeaders(req),
+    body: JSON.stringify(reqBody),
+  }).then((result) => result.json());
+
+  if (get(newUser, "statusCode") === 201) {
+    req.session.set(USER_CONSTANT, extractSessionUser(get(newUser, "data")));
+    await req.session.save();
+  }
+
+  return get(newUser, 'success', false);
+};
 
 export default withSession(async (req, res) => {
   const { body = {}, method } = req;
@@ -108,6 +146,16 @@ export default withSession(async (req, res) => {
 
   if (values?.params) {
     orderData.order.params = values?.params;
+  }
+
+  // create user before order
+  const createAccount = get(cartContactSession, "createAccount", "");
+  if (createAccount) {
+    try {
+      await createUser(cartContactSession, cartAccessToken, req);
+    } catch (e) {
+      // do nothing, creating of order is priority
+    }
   }
 
   url += "";
