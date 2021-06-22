@@ -1,5 +1,10 @@
 import withSession, { extractSessionUser } from "grandus-lib/utils/session";
-import { reqGetHeaders, reqApiHost, reqGetHost, generateRandomString } from "grandus-lib/utils";
+import {
+  reqGetHeaders,
+  reqApiHost,
+  reqGetHost,
+  generateRandomString,
+} from "grandus-lib/utils";
 import {
   CART_CONSTANT,
   CART_CONTACT_CONSTANT,
@@ -7,13 +12,15 @@ import {
   SESSION_STORAGE_CONSTANT,
   USER_CONSTANT,
 } from "grandus-lib/constants/SessionConstants";
-import { get, toNumber, isEmpty } from "lodash";
+import get from "lodash/get";
+import toNumber from "lodash/toNumber";
+import isEmpty from "lodash/isEmpty";
 
 const createUser = async (contact, cartAccessToken, req) => {
   const pass = generateRandomString();
   const reqBody = {
     user: {
-      name: get(contact, "firstname") || get(contact, 'name'),
+      name: get(contact, "firstname") || get(contact, "name"),
       surname: get(contact, "surname"),
       email: get(contact, "email"),
       password: get(contact, "password") || pass,
@@ -23,6 +30,7 @@ const createUser = async (contact, cartAccessToken, req) => {
   if (cartAccessToken) {
     reqBody.cart = { accessToken: cartAccessToken };
   }
+
   if (get(contact, "isCompany")) {
     reqBody.company = {
       name: get(contact, "companyName"),
@@ -43,7 +51,7 @@ const createUser = async (contact, cartAccessToken, req) => {
     await req.session.save();
   }
 
-  return get(newUser, 'success', false);
+  return get(newUser, "success", false);
 };
 
 export default withSession(async (req, res) => {
@@ -58,7 +66,10 @@ export default withSession(async (req, res) => {
   const sessionStorage = req.session.get(SESSION_STORAGE_CONSTANT);
 
   const cartAccessToken = get(cartSession, "accessToken");
-  const cartSpecificDeliveryData = get(sessionStorage, DELIVERY_DATA_SESSION_STORAGE_KEY);
+  const cartSpecificDeliveryData = get(
+    sessionStorage,
+    DELIVERY_DATA_SESSION_STORAGE_KEY
+  );
 
   let order = null;
   let url = `${reqApiHost(req)}/api/v2/orders`;
@@ -66,7 +77,9 @@ export default withSession(async (req, res) => {
   const orderData = {
     order: {
       cart: { accessToken: cartAccessToken },
-      name: get(cartContactSession, "firstname", "") || get(cartContactSession, "name", ""),
+      name:
+        get(cartContactSession, "firstname", "") ||
+        get(cartContactSession, "name", ""),
       surname: get(cartContactSession, "surname", ""),
       city: get(cartContactSession, "city", ""),
       street: get(cartContactSession, "street", ""),
@@ -90,6 +103,9 @@ export default withSession(async (req, res) => {
     orderData.order.ico = get(cartContactSession, "ico", "");
     orderData.order.dic = get(cartContactSession, "dic", "");
     orderData.order.icDPH = get(cartContactSession, "icDPH", "");
+  } else {
+      // send empty comany name if isCompany == false => BE will regenerate companyName then
+      orderData.order.companyName = "";
   }
 
   if (cartContactSession?.isDifferentDeliveryAddress) {
@@ -141,7 +157,9 @@ export default withSession(async (req, res) => {
   }
 
   if (!isEmpty(cartSpecificDeliveryData)) {
-    orderData.order.specificDeliveryJson = JSON.stringify(cartSpecificDeliveryData);
+    orderData.order.specificDeliveryJson = JSON.stringify(
+      cartSpecificDeliveryData
+    );
   }
 
   if (values?.params) {
