@@ -26,6 +26,7 @@ export default withSession(async (req, res) => {
       headers: reqGetHeaders(req),
       body: JSON.stringify({
         categoryName: get(req, "query.id", ""),
+        search: get(req, "query.search", ""),
         ...getApiBodyFromPath(get(req, "query.param", [])),
       }),
     }
