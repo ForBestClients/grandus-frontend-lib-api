@@ -41,17 +41,14 @@ export default async (req, res) => {
     });
   }
 
-  console.log(reqData);
-
   const responseObject = await fetch(
     `https://graph.facebook.com/${process?.env?.FB_API_VERSION || "v11.0"}/${
       process?.env?.FB_PIXEL_ID
     }/events?access_token=${process?.env?.FB_ACCESS_TOKEN}`
   );
 
-  const response = await responseObject.json();
-  console.log(response);
   if (responseObject.status !== 200) {
+    const response = await responseObject.json();
     return res.status(200).json({
       status: "Error",
       message: response?.error?.message,
