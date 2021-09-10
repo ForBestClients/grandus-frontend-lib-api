@@ -25,13 +25,13 @@ export default async (req, res) => {
     ...req?.body,
     ...{
       user_data: {
-        event_time: new Date().getTime(),
         client_ip_address: getClientIpAddress(req),
         client_user_agent: getClientUserAgent(req),
         fbc: getClientFbp(req),
         fbp: getClientFbc(req),
       },
-      event_source_url: getClientRefererUrl(req)
+      event_time: Math.floor(Date.now() / 1000),
+      event_source_url: getClientRefererUrl(req),
     },
   };
 
@@ -44,7 +44,11 @@ export default async (req, res) => {
   const responseObject = await fetch(
     `https://graph.facebook.com/${process?.env?.FB_API_VERSION || "v11.0"}/${
       process?.env?.FB_PIXEL_ID
-    }/events?access_token=${process?.env?.FB_ACCESS_TOKEN}`
+    }/events?access_token=${process?.env?.FB_ACCESS_TOKEN}`,
+    {
+      method: "POST",
+      body: `data=${JSON.stringify([reqData])}`,
+    }
   );
 
   if (responseObject.status !== 200) {
