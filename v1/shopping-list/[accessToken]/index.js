@@ -26,7 +26,6 @@ export default withSession(async (req, res) => {
       shoppingList = await fetch(url, {
         headers: reqGetHeaders(req),
       }).then(async (result) => await result.json());
-      set(shoppingList, "data.editable", get(shoppingList, 'user'))
       res.status(get(shoppingList, "statusCode", 500)).json(get(shoppingList, "data"));
       break;
 
