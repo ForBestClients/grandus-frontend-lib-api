@@ -86,6 +86,7 @@ export default withSession(async (req, res) => {
       streetNumber: get(cartContactSession, "streetNumber", ""),
       zip: get(cartContactSession, "zip", ""),
       countryId: get(cartContactSession, "countryId", ""),
+      phoneCountryCode: get(cartContactSession, "phoneCountryCode", ""),
       phone: get(cartContactSession, "phone", ""),
       email: get(cartContactSession, "email", ""),
       note: get(values, "note", ""),
@@ -130,6 +131,11 @@ export default withSession(async (req, res) => {
     orderData.order.deliveryPhone = get(
       cartContactSession,
       "deliveryPhone",
+      ""
+    );
+    orderData.order.deliveryPhoneCountryCode = get(
+      cartContactSession,
+      "deliveryPhoneCountryCode",
       ""
     );
     orderData.order.deliveryEmail = get(
