@@ -6,7 +6,7 @@ export default async (req, res) => {
     `${reqApiHost(req)}/api/v2/pages/${get(
       req,
       "query.id"
-    )}?expand=content,customCss,customJavascript,attachments`,
+    )}?expand=photo,content,customCss,customJavascript,attachments`,
     {
       headers: reqGetHeaders(req),
     }
