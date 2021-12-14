@@ -106,7 +106,12 @@ export default withSession(async (req, res) => {
       detailedParameters: get(product, "detailedParameters", []),
       additionalInfos: get(product, "additionalInfos", []),
       marketingSets: get(product, "marketingSets", []),
-      productHooks: get(product, "productHooks", []),
+      // normalization with hooks from mysql
+      productHooks: [
+        ...get(product, "productHooks.hard", []),
+        ...get(product, "productHooks.soft", []),
+        ...get(product, "productHooks.discount", []),
+      ],
 
       //added fields
       meta: {},
