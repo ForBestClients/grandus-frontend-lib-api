@@ -18,7 +18,7 @@ export default async (req, res) => {
     .then((r) => get(r, "data", []));
   const statusCode = !isEmpty(response) ? 200 : 500;
   if (statusCode == 200) {
-    saveDataToCache(req, cache, response);
+    saveDataToCache(req, cache, response, { time: 60 * 60 * 24 }); //custom length
   }
 
   res.status(statusCode).json(response);
