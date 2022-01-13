@@ -28,6 +28,14 @@ export default withSession(async (req, res) => {
       requestBody.search = get(req, "query.search", "");
     }
 
+    if (get(req, "query.favourite")) {
+      requestBody.favourite = get(req, "query.favourite", "");
+    }
+
+    if (get(req, "query.new")) {
+      requestBody.favourite = get(req, "query.new", "");
+    }
+
     if (get(req, "query.orderBy")) {
       requestBody.orderBy = get(req, "query.orderBy");
     } else {
