@@ -8,10 +8,10 @@ import cache, {
 
 export default withSession(async (req, res) => {
   let cacheOptions = {};
-  if (get(req, 'query.cacheForUser', false) == 'true') {
+  if (get(req, "query.cacheForUser", false) == "true") {
     cacheOptions = {
       cacheKeyType: "custom",
-      cacheKeyParts: [get(req, "query.id")]
+      cacheKeyParts: [get(req, "query.id")],
     };
   }
   if (await outputCachedData(req, res, cache, cacheOptions)) return;
@@ -25,7 +25,7 @@ export default withSession(async (req, res) => {
     }
   ).then((result) => result.json());
 
-  const data = page?.data;
+  const data = page?.data || {};
   if (get(page, "statusCode", 500) == 200) {
     saveDataToCache(req, cache, data, cacheOptions);
   }
