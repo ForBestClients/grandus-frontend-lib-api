@@ -19,7 +19,7 @@ export default withSession(async (req, res) => {
     `${reqApiHost(req)}/api/v2/blogs/${get(
       req,
       "query.id"
-    )}?expand=tags,category,text,gallery`,
+    )}?expand=tags,category,text,gallery,products`,
     {
       headers: reqGetHeaders(req),
     }
