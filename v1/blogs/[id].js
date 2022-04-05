@@ -8,10 +8,10 @@ import cache, {
 
 export default withSession(async (req, res) => {
   let cacheOptions = {};
-  if (get(req, 'query.cacheForUser', false) == 'true') {
+  if (get(req, "query.cacheForUser", false) == "true") {
     cacheOptions = {
       cacheKeyType: "custom",
-      cacheKeyParts: [get(req, "query.id")]
+      cacheKeyParts: [get(req, "query.id")],
     };
   }
   if (await outputCachedData(req, res, cache, cacheOptions)) return;
@@ -19,7 +19,7 @@ export default withSession(async (req, res) => {
     `${reqApiHost(req)}/api/v2/blogs/${get(
       req,
       "query.id"
-    )}?expand=tags,category,text,gallery`,
+    )}?expand=tags,category,text,gallery,products`,
     {
       headers: reqGetHeaders(req),
     }
