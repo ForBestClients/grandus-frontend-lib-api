@@ -20,7 +20,7 @@ export default withSession(async (req, res) => {
     }
   ).then((result) => result.json());
 
-  saveDataToCache(req, cache, orders?.data);
+  saveDataToCache(req, cache, orders?.data, { time: 30 });
 
   res.status(200).json(orders?.data);
 });

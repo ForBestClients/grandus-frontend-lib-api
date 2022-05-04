@@ -21,7 +21,7 @@ export default withSession(async (req, res) => {
   ).then((result) => result.json());
 
   if (!isEmpty(items?.data)) {
-    saveDataToCache(req, cache, items?.data);
+    saveDataToCache(req, cache, items?.data, { time: 30 });
   }
 
   try {
