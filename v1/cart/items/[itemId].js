@@ -2,6 +2,7 @@ import withSession, { extractSessionCart } from "grandus-lib/utils/session";
 import { reqGetHeaders, reqApiHost, getApiExpand } from "grandus-lib/utils";
 import { CART_CONSTANT } from "grandus-lib/constants/SessionConstants";
 import { get } from "lodash";
+import cartExtender from "grandus-lib/utils/cartExtender";
 
 export default withSession(async (req, res) => {
   const { body = {}, method } = req;
@@ -80,7 +81,7 @@ export default withSession(async (req, res) => {
       await req.session.save();
 
       res.statusCode = get(cart, "statusCode");
-      res.end(JSON.stringify(get(cart, "data")));
+      res.end(JSON.stringify(cartExtender(get(cart, "data"))));
       break;
 
     case "PUT":
@@ -94,7 +95,7 @@ export default withSession(async (req, res) => {
       await req.session.save();
 
       res.statusCode = get(cart, "statusCode");
-      res.end(JSON.stringify(get(cart, "data")));
+      res.end(JSON.stringify(cartExtender(get(cart, "data"))));
       break;
 
     default:

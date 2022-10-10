@@ -2,6 +2,7 @@ import withSession, { extractSessionCart } from "grandus-lib/utils/session";
 import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
 import { CART_CONSTANT } from "grandus-lib/constants/SessionConstants";
 import { get } from "lodash";
+import cartExtender from "grandus-lib/utils/cartExtender";
 
 export default withSession(async (req, res) => {
   const { body = {}, method } = req;
@@ -25,7 +26,7 @@ export default withSession(async (req, res) => {
   );
   await req.session.save();
 
-  res.status(get(response, "statusCode", 500)).json(get(response, "data"));
+  res.status(get(response, "statusCode", 500)).json(cartExtender(get(response, "data")));
 
   // Update or create data in your database
   //   res.status(200).json({ id, name: name || `User ${id}` });

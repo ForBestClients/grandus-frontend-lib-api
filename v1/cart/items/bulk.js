@@ -2,6 +2,7 @@ import withSession, { extractSessionCart } from "grandus-lib/utils/session";
 import { reqGetHeaders, reqApiHost, getApiExpand } from "grandus-lib/utils";
 import { CART_CONSTANT } from "grandus-lib/constants/SessionConstants";
 import { get, map, isEmpty } from "lodash";
+import cartExtender from "grandus-lib/utils/cartExtender";
 
 const appendUrlFields = (url) => {
   let newUrl = url;
@@ -83,5 +84,5 @@ export default withSession(async (req, res) => {
   }
 
   res.statusCode = get(cart, "statusCode", 500);
-  res.end(JSON.stringify(get(cart, "data", [])));
+  res.end(JSON.stringify(cartExtender(get(cart, "data", []))));
 });
