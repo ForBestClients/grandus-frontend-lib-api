@@ -13,7 +13,7 @@ export default withSession(async (req, res) => {
 
   if (!cartAccessToken) {
     res.statusCode = 404;
-    res.end("cart not found");
+    res.end({message: "cart not found"});
     return;
   }
 
@@ -76,8 +76,10 @@ export default withSession(async (req, res) => {
         method: "DELETE",
       }).then((result) => result.json());
 
-      req.session.set(CART_CONSTANT, extractSessionCart(get(cart, "data")));
-      await req.session.save();
+      if (get(cart, 'status', false)) {
+        req.session.set(CART_CONSTANT, extractSessionCart(get(cart, "data")));
+        await req.session.save();
+      }
 
       res.statusCode = get(cart, "statusCode");
       res.end(JSON.stringify(get(cart, "data")));
@@ -90,8 +92,10 @@ export default withSession(async (req, res) => {
         body: body,
       }).then((result) => result.json());
 
-      req.session.set(CART_CONSTANT, extractSessionCart(get(cart, "data")));
-      await req.session.save();
+      if (get(cart, 'status', false)) {
+        req.session.set(CART_CONSTANT, extractSessionCart(get(cart, "data")));
+        await req.session.save();
+      }
 
       res.statusCode = get(cart, "statusCode");
       res.end(JSON.stringify(get(cart, "data")));
