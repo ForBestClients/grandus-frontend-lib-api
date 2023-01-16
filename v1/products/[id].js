@@ -112,6 +112,7 @@ export default withSession(async (req, res) => {
         ...get(product, "productHooks.soft", []),
         ...get(product, "productHooks.discount", []),
       ],
+      jsonData: get(product, "jsonData", {}),
 
       //added fields
       meta: {},
