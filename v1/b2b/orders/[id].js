@@ -17,7 +17,7 @@ export default withSession(async (req, res) => {
     )}/orders/${get(
       req,
       "query.id"
-    )}?expand=items,orderItems,paymentType,deliveryInfo,invoices,canCreateInvoice,deliveryNotes,origin,suborders,operationUnit,user,parameters`,
+    )}?expand=items,orderItems,paymentType,deliveryInfo,invoices,canCreateInvoice,deliveryNotes,origin,suborders.orderItems,operationUnit,user,parameters`,
     {
       headers: reqGetHeaders(req),
     }
