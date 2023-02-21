@@ -4,7 +4,7 @@ export default async (req, res) => {
   const data = await fetch(
     `${reqApiHost(req)}/api/v2/pages${reqExtractUri(
       req.url
-    )}?fields=id,title,urlTitle`,
+    )}?fields=id,title,urlTitle,photo`,
     {
       headers: reqGetHeaders(req),
     }
