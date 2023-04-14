@@ -1,12 +1,15 @@
 import { get } from "lodash";
-import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
+import {reqGetHeaders, reqApiHost, getApiExpand} from "grandus-lib/utils";
 
 export default async (req, res) => {
+  const additionalExpandFields = getApiExpand("PAGE_ADDITIONAL", false);
+  const additionalExpandFieldsString = additionalExpandFields ? `,${additionalExpandFields}` : "";
+
   const data = await fetch(
     `${reqApiHost(req)}/api/v2/pages/${get(
       req,
       "query.id"
-    )}?expand=photo,content,customCss,customJavascript,attachments,products`,
+    )}?expand=photo,content,customCss,customJavascript,attachments,products${additionalExpandFieldsString}`,
     {
       headers: reqGetHeaders(req),
     }
