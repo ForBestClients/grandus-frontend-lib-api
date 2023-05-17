@@ -9,6 +9,7 @@ export default async (req, res) => {
   if (await outputCachedData(req, res, cache)) return;
 
   const { query } = req;
+
   const result = await fetch(
     `${reqApiHost(req)}/api/v2/deliveries/possible-by-items?expand=${
       query?.expand
@@ -17,7 +18,7 @@ export default async (req, res) => {
       method: "post",
       headers: reqGetHeaders(req),
       body: JSON.stringify({
-        item: query?.items ? [...query?.items] : [],
+        items: query?.items ? [...query?.items] : [],
       }),
     }
   ).then((r) => r.json());
