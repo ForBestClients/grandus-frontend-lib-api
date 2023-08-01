@@ -14,7 +14,7 @@ export default withSession(async (req, res) => {
     `${reqApiHost(req)}/api/v2/users/${get(
       req.session.get(USER_CONSTANT),
       "id"
-    )}/orders`,
+    )}/orders?expand=orderItems`,
     {
       headers: reqGetHeaders(req),
     }
