@@ -10,11 +10,16 @@ import cache, {
 export default withSession(async (req, res) => {
   if (await outputCachedData(req, res, cache)) return;
 
+  let expand = ""
+  if(req?.query?.expand){
+    expand = `?expand=${req?.query?.expand}`
+  }
+
   const orders = await fetch(
     `${reqApiHost(req)}/api/v2/users/${get(
       req.session.get(USER_CONSTANT),
       "id"
-    )}/orders?expand=orderItems`,
+    )}/orders${expand ? expand : ""}`,
     {
       headers: reqGetHeaders(req),
     }
