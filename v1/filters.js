@@ -19,16 +19,24 @@ export default withSession(async (req, res) => {
 
   if (await outputCachedData(req, res, cache, cacheOptions)) return;
 
+  const apiBody = {
+    ...getApiBodyFromPath(get(req, "query.param", [])),
+  };
+
+  if (get(req, "query.id")) {
+    apiBody.categoryName = get(req, "query.id");
+  }
+
+  if (get(req, "query.search")) {
+    apiBody.search = get(req, "query.search");
+  }
+
   const result = await fetch(
     `${reqApiHost(req)}/api/v2/filters${reqExtractUri(req.url)}`,
     {
       method: "post",
       headers: reqGetHeaders(req),
-      body: JSON.stringify({
-        categoryName: get(req, "query.id", ""),
-        search: get(req, "query.search", ""),
-        ...getApiBodyFromPath(get(req, "query.param", [])),
-      }),
+      body: JSON.stringify(apiBody),
     }
   ).then((r) => {
     return r.json();
