@@ -6,11 +6,12 @@ import withSession, {
 import { reqGetHeaders, reqApiHost, getApiExpand } from "grandus-lib/utils";
 import {
   USER_CONSTANT,
-  CART_CONSTANT,
+  CART_CONSTANT, USER_WISHLIST_CONSTANT,
 } from "grandus-lib/constants/SessionConstants";
+import map from "lodash/map";
 
 export default withSession(async (req, res) => {
-  let url = `${reqApiHost({})}/api/v2/users/login?expand=cart`;
+  let url = `${reqApiHost({})}/api/v2/users/login?expand=cart,wishlist`;
 
   if (getApiExpand("LOGIN", false, "FIELDS")) {
     url += "&" + getApiExpand("LOGIN", true, "FIELDS");
@@ -32,6 +33,12 @@ export default withSession(async (req, res) => {
       req.session.set(
         CART_CONSTANT,
         extractSessionCart(get(user, "data.cart"))
+      );
+    }
+    if (user?.data?.wishlist) {
+      req.session.set(
+          USER_WISHLIST_CONSTANT,
+          map(user?.data?.wishlist?.items, item =>item.product.id)
       );
     }
     await req.session.save();
