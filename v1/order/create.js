@@ -82,6 +82,7 @@ export default withSession(async (req, res) => {
         get(cartContactSession, "name", ""),
       surname: get(cartContactSession, "surname", ""),
       city: get(cartContactSession, "city", ""),
+      province: get(cartContactSession, "province", null),
       street: get(cartContactSession, "street", ""),
       streetNumber: get(cartContactSession, "streetNumber", ""),
       zip: get(cartContactSession, "zip", ""),
@@ -117,6 +118,7 @@ export default withSession(async (req, res) => {
       ""
     );
     orderData.order.deliveryCity = get(cartContactSession, "deliveryCity", "");
+    orderData.order.deliveryProvince = get(cartContactSession, "deliveryProvince", null);
     orderData.order.deliveryStreet = get(
       cartContactSession,
       "deliveryStreet",
