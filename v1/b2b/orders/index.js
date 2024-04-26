@@ -1,11 +1,15 @@
 import withSession from "grandus-lib/utils/session";
 import { reqGetHeaders, reqApiHost } from "grandus-lib/utils";
 import { USER_CONSTANT } from "grandus-lib/constants/SessionConstants";
-import { get } from "lodash";
+import {get, last} from "lodash";
 import cache, {
   outputCachedData,
   saveDataToCache,
 } from "grandus-lib/utils/cache";
+import filter from "lodash/filter";
+import map from "lodash/map";
+import isEmpty from "lodash/isEmpty";
+import first from "lodash/first";
 
 export default withSession(async (req, res) => {
   if (await outputCachedData(req, res, cache)) return;
@@ -14,7 +18,7 @@ export default withSession(async (req, res) => {
     `${reqApiHost(req)}/api/v2/users/${get(
       req.session.get(USER_CONSTANT),
       "id"
-    )}/orders`,
+    )}/orders?expand=suborders`,
     {
       headers: reqGetHeaders(req),
     }
