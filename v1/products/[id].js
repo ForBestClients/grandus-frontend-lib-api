@@ -65,6 +65,7 @@ export default withSession(async (req, res) => {
       finalPriceData: get(product, "finalPriceData"),
       standardPriceData: get(product, "standardPriceData"),
       specialPrice: get(product, "specialPrice"),
+      minPriceInLastDays: get(product, "minPriceInLastDays"),
       VAT: get(product, "VAT"),
       brand: get(product, "brand", {}),
       kind: get(product, "kind", {}),
