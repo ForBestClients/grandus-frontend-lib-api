@@ -38,7 +38,7 @@ export default withSession(async (req, res) => {
     if (user?.data?.wishlist) {
       req.session.set(
           USER_WISHLIST_CONSTANT,
-          map(user?.data?.wishlist?.items, item =>item.product.id)
+          map(user?.data?.wishlist?.items, item =>item?.product?.id)
       );
     }
     await req.session.save();
