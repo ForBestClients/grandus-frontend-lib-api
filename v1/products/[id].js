@@ -10,6 +10,7 @@ import {
   getProductDetailFields,
 } from "grandus-lib/utils";
 import { get } from "lodash";
+import map from "lodash/map";
 
 export default withSession(async (req, res) => {
   if (get(req, "query.initial") == 1) {
@@ -104,7 +105,22 @@ export default withSession(async (req, res) => {
       isOrderable: get(product, "isOrderable"),
       externalUrl: get(product, "externalUrl", ""),
       gallery: get(product, "gallery", []),
-      detailedParameters: get(product, "detailedParameters", []),
+      detailedParameters: map(get(product, 'parameters', []), param => {
+        return {
+          description: '',
+          filter: '',
+          group: null,
+          hash: get(param, 'hash'),
+          id: '',
+          name: get(param, 'name'),
+          parameterId: get(param, 'parameterId'),
+          photoPath: get(param, 'photoPath'),
+          priority: '',
+          urlName: get(param, 'urlName'),
+          value: get(param, 'value'),
+          visibleProductCard: 0,
+        };
+      }),
       additionalInfos: get(product, "additionalInfos", []),
       marketingSets: get(product, "marketingSets", []),
       // normalization with hooks from mysql
