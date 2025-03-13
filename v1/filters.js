@@ -31,6 +31,11 @@ export default withSession(async (req, res) => {
     apiBody.marketingCampaign = get(req, 'query.marketingCampaign');
   }
 
+  if (get(apiBody, 'param.marketing-set')) {
+    apiBody.marketingSets = get(apiBody, 'param.marketing-set[0]');
+    delete apiBody.param['marketing-set'];
+  }
+
   if (get(req, 'query.search')) {
     apiBody.search = get(req, 'query.search');
   }
