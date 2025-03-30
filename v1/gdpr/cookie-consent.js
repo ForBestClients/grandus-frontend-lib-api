@@ -5,13 +5,13 @@ import { LEGAL_COOKIE_CONSENT } from "grandus-lib/constants/SessionConstants";
 
 const generateOutput = (webinstance, consent) => {
   return {
-    accepted: consent ? true : false,
+    ...consent,
     link: get(webinstance, "globalSettings.cookie_policy_page", null),
   };
 };
 
 export default withSession(async (req, res) => {
-  const { method } = req;
+  const { method, body } = req;
 
   switch (method) {
     case "GET":
@@ -24,10 +24,12 @@ export default withSession(async (req, res) => {
       break;
 
     case "PUT":
-      req.session.set(LEGAL_COOKIE_CONSENT, true);
+      const parsedBody = body ? JSON.parse(body) : {};
+      const newConsent = { ...parsedBody, accepted: true };
+      req.session.set(LEGAL_COOKIE_CONSENT, newConsent);
       await req.session.save();
 
-      res.status(200).json(generateOutput({}, true));
+      res.status(200).json(generateOutput({}, newConsent));
       break;
 
     default:
