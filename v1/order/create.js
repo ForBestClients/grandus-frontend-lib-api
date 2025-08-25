@@ -15,6 +15,7 @@ import {
 import get from "lodash/get";
 import toNumber from "lodash/toNumber";
 import isEmpty from "lodash/isEmpty";
+import {localizePath} from "src/lib/localizePath";
 
 const createUser = async (contact, cartAccessToken, req) => {
   const pass = generateRandomString();
@@ -94,7 +95,7 @@ export default withSession(async (req, res) => {
       deliveryType: get(values, "delivery", ""),
       paymentType: get(values, "payment", ""),
       operationUnitId: get(values, "operationUnitId", ""),
-      cardPaymentReturnUrl: get(values, "cardPaymentReturnUrl", "") || `${reqGetHost(req)}/objednavka/dakujeme`,
+      cardPaymentReturnUrl: get(values, "cardPaymentReturnUrl", "") || localizePath(`${reqGetHost(req)}/objednavka/dakujeme`),
       privacyPolicy: toNumber(get(values, "privacyPolicy", 0)),
       termsAndConditions: toNumber(get(values, "termsAndConditions", 0)),
     },
