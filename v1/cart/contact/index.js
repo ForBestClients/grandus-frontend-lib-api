@@ -14,16 +14,14 @@ export default withSession(async (req, res) => {
 
       cartContact = req.session.get(CART_CONTACT_CONSTANT);
 
-      res.statusCode = 200;
-      res.end(cartContact);
+      res.status(200).json(cartContact ?? {});
       break;
 
     case "POST":
       req.session.set(CART_CONTACT_CONSTANT, body);
       await req.session.save();
 
-      res.statusCode = 200;
-      res.end(req.session.get(CART_CONTACT_CONSTANT));
+      res.status(200).json(req.session.get(CART_CONTACT_CONSTANT) ?? {});
       break;
 
     case "DELETE":
