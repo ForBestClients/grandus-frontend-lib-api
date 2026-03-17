@@ -3,7 +3,7 @@ import withSession, {
   extractSessionUser,
   extractSessionCart,
 } from "grandus-lib/utils/session";
-import { reqGetHeadersBasic, reqApiHost, getApiExpand } from "grandus-lib/utils";
+import { reqGetHeaders, reqApiHost, getApiExpand } from "grandus-lib/utils";
 import {
   USER_CONSTANT,
   CART_CONSTANT,
@@ -24,7 +24,7 @@ export default withSession(async (req, res) => {
   }
 
   const user = await fetch(url, {
-    headers: reqGetHeadersBasic(),
+    headers: reqGetHeaders(),
   }).then((result) => result.json());
 
   if (get(user, "statusCode") !== 200) {
