@@ -12,7 +12,7 @@ export default withSession(async (req, res) => {
     return res.status(405).end(`Method ${method} Not Allowed`);
   }
 
-  const url = `${reqApiHost(req)}/api/v2/shopping-lists?expand=items&fields=id,name,note,type,accessToken,createTimeData,createdBy,editable,items.id,items.product.id`;
+  const url = `${reqApiHost(req)}/api/v2/shopping-lists?fields=id,name,note,type,accessToken,createTimeData,createdBy,editable,itemsCount`;
 
   const result = await fetch(url, {
     headers: reqGetHeaders(req),
