@@ -24,7 +24,12 @@ export default withSession(async (req, res) => {
   }).then((result) => result.json());
 
   if (get(user, "statusCode") !== 200) {
-    res.statusCode = get(user, "data.code");
+    // The API envelope carries the real HTTP status in data.status (e.g. 401);
+    // data.code is 0 for auth failures, and `res.statusCode = 0` throws
+    // ERR_HTTP_INVALID_STATUS_CODE — which crashed the response so the client
+    // never received the error message (login showed no validation error).
+    res.statusCode =
+      get(user, "data.status") || get(user, "statusCode") || 400;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(get(user, "data.messages")));
   } else {
