@@ -41,8 +41,8 @@ export default withSession(async (req, res) => {
       // Get data from your database
       //   res.status(200).json({ id, name: `User ${id}` });
 
-      req.session.set(CART_CONSTANT, extractSessionCart(get(cart, "data")));
-      await req.session.save();
+      // req.session.set(CART_CONSTANT, extractSessionCart(get(cart, "data")));
+      // await req.session.save();
 
       res.statusCode = 200;
       res.end(JSON.stringify(get(cart, "data")));
