@@ -15,7 +15,9 @@ export default withSession(async (req, res) => {
     url += "?" + getApiExpand("SHOPPING_LIST", true);
   }
 
-  if (getApiExpand("SHOPPING_LIST", false, "FIELDS")) {
+  if (query?.fields) {
+    url += (url.includes("?") ? "&" : "?") + `fields=${query.fields}`;
+  } else if (getApiExpand("SHOPPING_LIST", false, "FIELDS")) {
     url +=
       (getApiExpand("SHOPPING_LIST") ? "&" : "?") +
       getApiExpand("SHOPPING_LIST", true, "FIELDS");
